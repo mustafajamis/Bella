@@ -16,8 +16,6 @@ mindmap
 <img width="256" height="384" alt="Generated image" src="https://github.com/user-attachments/assets/fc8f2ba4-43c5-4865-90d9-8408f1c23edf" />
 
 
-## English Version
-
 # Bella: Your Digital Companion, Awakening
 
 Welcome to the genesis of Bella.
