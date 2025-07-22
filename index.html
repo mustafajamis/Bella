@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voice Assistant</title>
     <link rel="stylesheet" href="style.css">
-    <!-- 引入 Font Awesome 图标库，用于麦克风图标 -->
+    <!-- Include Font Awesome icon library for microphone icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-    <!-- 加载屏幕 -->
+    <!-- Loading Screen -->
     <div id="loading-screen">
         <img src="Bellaicon/Generated image.webp" alt="Loading Bella...">
     </div>
 
-    <!-- 视频背景 -->
+    <!-- Video Background -->
     <div class="video-container">
         <video autoplay muted class="bg-video active" id="video1">
             <source src="视频资源/3D 建模图片制作.mp4" type="video/mp4">
@@ -27,54 +27,38 @@
         </video>
     </div>
 
-    <!-- 内容层，覆盖在视频之上 -->
+    <!-- Bella Speaking Indicator -->
+    <div class="speaking-indicator" id="speaking-indicator">
+        🎤 Bella is speaking...
+    </div>
+
+    <!-- Content Layer, overlaying the video -->
     <div class="content-overlay">
 
-        <!-- 顶部好感度条 -->
-        <header class="top-bar">
-            <label for="favorability-bar">Favorability</label>
-            <div class="progress-container">
-                <div class="progress-fill" id="favorability-bar"></div>
-            </div>
-        </header>
-
-        <!-- 语音识别结果显示区域 -->
+        <!-- Speech Recognition Result Display Area -->
         <div class="transcript-container">
             <p id="transcript"></p>
         </div>
 
-        <!-- 情感分析测试区域 -->
-        <div class="sentiment-analysis-container">
-            <input type="text" id="sentiment-input" placeholder="对我输入一些文字...">
-            <button id="analyze-button">分析情绪</button>
-            <p id="sentiment-result"></p>
-        </div>
-
-        <!-- 本地语音识别测试区域 -->
-        <div id="local-asr-container" class="local-asr-container">
-            <button id="local-mic-button">开始本地识别</button>
-            <p>本地识别结果: <span id="local-asr-result"></span></p>
-        </div>
-
-        <!-- 悬浮球 -->
+        <!-- Floating Button -->
         <div id="floating-button">
             <i class="fas fa-bars"></i>
         </div>
 
-        <!-- 悬浮菜单 -->
+        <!-- Floating Menu -->
         <div id="menu-container" class="hidden">
             <button class="menu-item" data-video="视频资源/jimeng-2025-07-16-4437-比耶，然后微笑着优雅的左右摇晃.mp4">Pose</button>
             <button class="menu-item" data-video="视频资源/生成加油视频.mp4">Cheer</button>
             <button class="menu-item" data-video="视频资源/生成跳舞视频.mp4">Dance</button>
         </div>
 
-        <!-- 底部麦克风和链接 -->
+        <!-- Bottom Microphone and Link -->
         <footer class="bottom-bar">
             <button class="mic-button" id="mic-button" aria-label="Start Listening">
                 <i class="fas fa-microphone"></i>
             </button>
-            <a href="https://x.com/jackywine" target="_blank" rel="noopener noreferrer" class="footer-credit">
-                @jackywine
+            <a href="https://github.com/mustafajamis" target="_blank" rel="noopener noreferrer" class="footer-credit">
+                @Mustafa jamshidi
             </a>
         </footer>
 

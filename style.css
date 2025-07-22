@@ -5,7 +5,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #000000;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,26 +14,30 @@
 }
 
 #loading-screen img {
-    width: 150px; /* 或者您希望的任何尺寸 */
+    width: 180px;
     height: auto;
+    border-radius: 50%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     animation: pulse-loader 2s infinite;
 }
 
 @keyframes pulse-loader {
     0% {
-        transform: scale(1);
+        transform: scale(1) rotate(0deg);
         opacity: 0.8;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
     50% {
-        transform: scale(1.1);
+        transform: scale(1.1) rotate(5deg);
         opacity: 1;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
     }
     100% {
-        transform: scale(1);
+        transform: scale(1) rotate(0deg);
         opacity: 0.8;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
 }
-
 
 /* --- 基本重置和全局样式 --- */
 * {
@@ -44,9 +48,10 @@
 
 html, body {
     height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     color: white;
-    overflow: hidden; /* 防止视频导致滚动条 */
+    overflow: hidden;
+    background: #000000;
 }
 
 /* --- 视频背景 --- */
@@ -56,7 +61,7 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: 0;
     background-color: #000000;
 }
 
@@ -66,13 +71,14 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* 保持视频比例，留出黑边 */
+    object-fit: contain;
     opacity: 0;
-    transition: opacity 0.2s ease-in-out; /* 交叉淡入淡出动画 */
+    transition: opacity 0.5s ease-in-out;
 }
 
 .bg-video.active {
     opacity: 1;
+}
 }
 
 /* --- 内容覆盖层 --- */
@@ -82,257 +88,139 @@ html, body {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* 顶部和底部分别对齐 */
+    justify-content: flex-end;
     align-items: center;
-    padding: 25px;
-    z-index: 1;
-}
-
-/* --- 顶部好感度条 --- */
-.top-bar {
-    width: 100%;
-    max-width: 500px;
-    text-align: left;
-}
-
-.top-bar label {
-    font-size: 1rem;
-    font-weight: 600;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-    margin-bottom: 8px;
-    display: block;
-}
-
-.progress-container {
-    width: 100%;
-    height: 12px;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    width: 65%; /* 初始好感度值 */
-    background: linear-gradient(90deg, #ff9a9e, #fecfef); /* 粉色渐变 */
-    border-radius: 10px;
-    transition: width 0.5s ease-in-out;
-}
-
-/* --- 中间内容 (上传按钮) --- */
-.center-content {
-    /* 这个区域现在是空的，可以移除或保留以备将来使用 */
+    padding: 30px;
+    z-index: 10;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.3) 100%);
 }
 
 /* --- 语音识别结果显示 --- */
 .transcript-container {
     position: absolute;
-    bottom: 180px; /* 放置在麦克风按钮上方 */
+    bottom: 200px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
-    max-width: 600px;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
+    width: 85%;
+    max-width: 700px;
+    padding: 20px 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
     text-align: center;
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: none; /* 默认不响应鼠标事件 */
+    transform: translateX(-50%) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
 }
 
 .transcript-container.visible {
     opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 #transcript {
-    font-size: 1.2rem;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-}
-
-/* 情感分析测试区域样式 */
-.sentiment-analysis-container {
-    position: fixed;
-    bottom: 120px; /* 位于麦克风按钮上方 */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    z-index: 1000;
-}
-
-#sentiment-input {
-    width: 300px;
-    padding: 10px;
-    border: none;
-    border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #333;
-    font-size: 16px;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-#sentiment-input:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    background-color: white;
-}
-
-#analyze-button {
-    padding: 8px 20px;
-    border: none;
-    border-radius: 20px;
-    background-color: #4a90e2;
+    font-size: 18px;
+    font-weight: 500;
     color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-#analyze-button:hover {
-    background-color: #357abd;
-    transform: scale(1.05);
-}
-
-#sentiment-result {
-    color: white;
-    font-size: 16px;
-    margin: 10px 0;
-    min-height: 20px;
-    text-align: center;
-}
-
-/* 本地语音识别测试区域样式 */
-.local-asr-container {
-    position: fixed;
-    bottom: 150px; /* 调整位置，避免与情感分析区域重叠 */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    z-index: 1001;
-    color: white;
-    text-align: center;
-}
-
-#local-mic-button {
-    background-color: #4CAF50; /* 绿色 */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-#local-mic-button:hover {
-    background-color: #45a049;
-}
-
-#local-mic-button.recording {
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
-    }
-}
-
-#local-asr-result {
-    font-weight: bold;
-    color: #2196F3; /* 蓝色 */
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    line-height: 1.4;
 }
 
 /* --- 悬浮按钮和菜单 --- */
 #floating-button {
     position: fixed;
-    bottom: 120px; /* 调整位置，使其在麦克风按钮上方 */
+    bottom: 140px;
     right: 30px;
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 65px;
+    height: 65px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    z-index: 10;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: float 3s ease-in-out infinite;
+    z-index: 1000;
 }
 
 #floating-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px) scale(1.1);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
 #floating-button i {
-    font-size: 24px;
+    font-size: 22px;
     color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 #menu-container {
     position: fixed;
-    bottom: 200px; /* 调整位置，使其在悬浮按钮上方 */
+    bottom: 220px;
     right: 30px;
-    width: 150px;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    z-index: 9;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    width: 160px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: bottom right;
 }
 
 #menu-container.hidden {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.8) translateY(20px);
     pointer-events: none;
 }
 
 .menu-item {
     display: block;
     width: 100%;
-    padding: 12px;
+    padding: 15px 20px;
     background: none;
     border: none;
     color: white;
-    font-size: 1rem;
+    font-size: 16px;
+    font-weight: 500;
     text-align: left;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.2s ease;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 8px;
+}
+
+.menu-item:last-child {
+    margin-bottom: 0;
 }
 
 .menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 
@@ -340,71 +228,144 @@ html, body {
 .bottom-bar {
     width: 100%;
     display: flex;
-    flex-direction: column; /* 垂直排列 */
-    justify-content: center; /* 水平居中 */
-    align-items: center; /* 垂直居中 */
-    position: relative; /* 为链接定位 */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 15px;
+    z-index: 1000;
 }
 
 .mic-button {
-    width: 80px;
-    height: 80px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 90px;
+    height: 90px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.mic-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mic-button:hover::before {
+    opacity: 1;
 }
 
 .mic-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px) scale(1.08);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .mic-button:active {
-    transform: scale(1.05);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .mic-button i {
-    font-size: 36px;
+    font-size: 38px;
     color: white;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    position: relative;
 }
 
-/* 麦克风 "监听中" 的动画效果 */
 .mic-button.is-listening {
-    animation: pulse 1.5s infinite;
+    animation: pulse-listening 1.5s infinite;
+    background: rgba(76, 175, 80, 0.3);
+    border-color: rgba(76, 175, 80, 0.6);
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.4);
 }
 
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(255, 154, 158, 0.7);
+@keyframes pulse-listening {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 30px rgba(76, 175, 80, 0.4);
     }
-    70% {
-        box-shadow: 0 0 0 20px rgba(255, 154, 158, 0);
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgba(76, 175, 80, 0.6);
     }
-    100% {
-        box-shadow: 0 0 0 0 rgba(255, 154, 158, 0);
+}
+
+/* --- 说话指示器 --- */
+.speaking-indicator {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    background: rgba(76, 175, 80, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(76, 175, 80, 0.4);
+    border-radius: 25px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(-20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(76, 175, 80, 0.2);
+    z-index: 1000;
+}
+
+.speaking-indicator.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    animation: speak-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes speak-pulse {
+    0%, 100% {
+        box-shadow: 0 10px 30px rgba(76, 175, 80, 0.2);
+    }
+    50% {
+        box-shadow: 0 15px 40px rgba(76, 175, 80, 0.4);
     }
 }
 
 .footer-credit {
-    margin-top: 20px; /* 与麦克风按钮的间距 */
-    color: rgba(255, 255, 255, 0.8);
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s ease;
+    font-size: 15px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .footer-credit:hover {
     color: white;
     text-decoration: underline;
+    transform: translateY(-2px);
 }
 
 /* --- 响应式设计 --- */
@@ -413,25 +374,80 @@ html, body {
         padding: 20px;
     }
 
-    .top-bar label {
-        font-size: 0.9rem;
-    }
-
-    .progress-container {
-        height: 10px;
-    }
-
     .mic-button {
-        width: 70px;
-        height: 70px;
+        width: 80px;
+        height: 80px;
     }
 
     .mic-button i {
-        font-size: 30px;
+        font-size: 32px;
     }
 
-    .footer-credit {
-        margin-top: 15px;
-        font-size: 0.9rem;
+    #floating-button {
+        width: 55px;
+        height: 55px;
+        bottom: 120px;
+        right: 20px;
+    }
+
+    #floating-button i {
+        font-size: 18px;
+    }
+
+    #menu-container {
+        width: 140px;
+        bottom: 190px;
+        right: 20px;
+    }
+
+    .transcript-container {
+        width: 90%;
+        bottom: 170px;
+        padding: 15px 20px;
+    }
+
+    #transcript {
+        font-size: 16px;
+    }
+
+    .speaking-indicator {
+        top: 20px;
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+/* --- Bella说话指示器 --- */
+.speaking-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    z-index: 50;
+    display: none;
+    animation: pulse-speaking 1.5s infinite;
+}
+
+.speaking-indicator.active {
+    display: block;
+}
+
+@keyframes pulse-speaking {
+    0% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    100% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1);
     }
 }
